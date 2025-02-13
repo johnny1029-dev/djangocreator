@@ -46,3 +46,13 @@ button {
 button:hover {
   background-color: #357ae8;
 }
+
+h1 {
+  margin-bottom: 30px;
+  margin-top: 0;
+}
+
+h4 {
+  margin-top: 20px;
+  margin-bottom: 0;
+}

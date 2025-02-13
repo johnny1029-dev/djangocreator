@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.svg' %}" >
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
@@ -11,11 +12,13 @@
   </head>
   <body>
     <form id="loginForm">
+      <h1>Log in</h1>
       <label for="username">Username: </label>
-      <input type="text" id="username" required/><br />
+      <input type="text" id="username" required autocomplete="on"/><br />
       <label for="password">Password: </label>
-      <input type="password" id="password" required/><br />
+      <input type="password" id="password" required autocomplete="on"/><br />
       <button type="submit">Log in</button>
+      <h4>or you can <a href="/signup">sign up</a>.</h4>
     </form>
   </body>
 </html>
