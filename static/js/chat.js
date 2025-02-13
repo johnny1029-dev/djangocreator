@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const chatInput = document.getElementById("userInput");
   const chatMessages = document.getElementById("chat");
 
+  let pastMessages = [{role: "system", content: "Your name is ChatDziPiTi, you are a django assistant",}];
+
   chatInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -30,6 +32,8 @@ document.addEventListener("DOMContentLoaded", function () {
     chatMessages.appendChild(messageElement);
     delete messageElement;
 
+    pastMessages.push({role: "user", content: message});
+
     const thinkingMessageElement = document.createElement("div");
     thinkingMessageElement.innerText = "thinking...";
     thinkingMessageElement.classList.add("message");
@@ -42,13 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       body: JSON.stringify({
         model: "meta-llama-3.1-8b-instruct",
-        messages: [
-          {
-            role: "system",
-            content: "Your name is ChatDziPiTi, you are a django assistant",
-          },
-          { role: "user", content: message },
-        ],
+        messages: pastMessages,
         temperature: 0.7,
         max_tokens: -1,
         stream: false,
@@ -67,6 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       })
       .then((data) => {
+        pastMessages.push(data.choices[0].message);
         thinkingMessageElement.innerHTML = DOMPurify.sanitize(
           marked.parse(data.choices[0].message.content)
         );
