@@ -3,25 +3,55 @@ document.addEventListener("DOMContentLoaded", function () {
   const chatInput = document.getElementById("userInput");
   const chatMessages = document.getElementById("chat");
 
+  chatInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendMessage();
+    }
+  });
+
   sendButton.addEventListener("click", (event) => {
     event.preventDefault();
+    chatInput.focus();
+    sendMessage();
+  });
 
+  function sendMessage() {
     const message = chatInput.value;
+    chatInput.value = "";
 
-    fetch("http://localhost:1234/v1/chat/completions", {
+    if (message === "") {
+      return;
+    }
+
+    const messageElement = document.createElement("div");
+    messageElement.innerHTML = DOMPurify.sanitize(marked.parse(message));
+    messageElement.classList.add("user-message");
+    chatMessages.appendChild(messageElement);
+    delete messageElement;
+
+    const thinkingMessageElement = document.createElement("div");
+    thinkingMessageElement.innerText = "thinking...";
+    thinkingMessageElement.classList.add("message");
+    chatMessages.appendChild(thinkingMessageElement);
+
+    fetch("https://johnny1029.pl/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "llama-3.2-1b-instruct",
+        model: "meta-llama-3.1-8b-instruct",
         messages: [
-          { role: "system", content: "Always answer in rhymes. Today is Thursday" },
-          { role: "user", content: message }
+          {
+            role: "system",
+            content: "Your name is ChatDziPiTi, you are a django assistant",
+          },
+          { role: "user", content: message },
         ],
         temperature: 0.7,
         max_tokens: -1,
-        stream: false
+        stream: false,
       }),
     })
       .then((response) => {
@@ -34,13 +64,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       })
       .then((data) => {
-        chatInput.value = "";
-        const messageElement = document.createElement("div");
-        messageElement.innerText = data.choices[0].message.content;
-        chatMessages.appendChild(messageElement);
+        thinkingMessageElement.innerHTML = DOMPurify.sanitize(
+          marked.parse(data.choices[0].message.content)
+        );
       })
       .catch((error) => {
+        thinkingMessageElement.innerText =
+          "An error occurred. Please try again.";
         console.error("Error:", error);
       });
-  });
+  }
 });

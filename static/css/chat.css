@@ -1,0 +1,99 @@
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+#chat_container {
+  height: 100%;
+  width: 100%;
+}
+
+#chat {
+  height: calc(100% - 50px);
+  width: 100%;
+  overflow-y: auto;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+#userInput {
+  width: calc(100% - 90px);
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+}
+
+#send {
+  width: 60px;
+  padding: 10px;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+
+#send:hover {
+  background-color: #357ae8;
+}
+
+#input-container {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: white;
+}
+
+.message {
+  max-width: 70%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #e0e0e0;
+  word-wrap: break-word;
+  clear: both;
+}
+
+.user-message {
+  max-width: 70%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #2b9bdb;
+  word-wrap: break-word;
+  float: right;
+  clear: both;
+}
+
+.message.user {
+  background-color: #dcf8c6;
+  align-self: flex-end;
+}
+
+.message.bot {
+  background-color: #f1f0f0;
+  align-self: flex-start;
+}
+
+/* marked fix for <p> in every line adding unnecessary padding to every message */
+p:first-child, 
+p:last-child {
+  display: inline;
+  margin: 0;
+}

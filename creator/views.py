@@ -5,7 +5,6 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 import json
-import requests
 
 
 def index(request):
