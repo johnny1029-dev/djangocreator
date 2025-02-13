@@ -56,6 +56,9 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then((response) => {
         if (response.ok) {
+          if(response.status === 204) {
+            return{choices: [{message: {content: "The server is offline. Please try again later."}}]};
+          }
           return response.json();
         } else {
           return response.json().then((data) => {
