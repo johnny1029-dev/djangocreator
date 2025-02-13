@@ -7,6 +7,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const nextUrl = urlParams.get('next') || '/test/'; // Default redirect URL
+
     fetch("/login/", {
       method: "POST",
       headers: {
@@ -16,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then((response) => {
         if (response.ok) {
-          console.log("Login successful");
+          window.location.href = nextUrl;
         } else {
           response.json().then((data) => {
             console.log(data);
