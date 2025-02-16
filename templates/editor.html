@@ -1,0 +1,26 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.svg' %}" >
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor</title>
+    <link rel="stylesheet" href="{% static 'css/editor.css' %}">
+    <script src="{% static 'js/editor.js' %}"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <a href="#" class="new-file">+ New File</a>
+        <h2>Files</h2>
+        <ul id="file-list">
+            <!-- Files will be dynamically added here -->
+        </ul>
+    </div>
+    <div class="editor">
+        <h1>Editor</h1>
+        <textarea id="editor-textarea" style="width: 100%; height: 80vh;"></textarea>
+    </div>
+</body>
+</html>

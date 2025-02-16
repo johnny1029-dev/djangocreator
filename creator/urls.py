@@ -9,4 +9,6 @@ urlpatterns = [
     path("logout/", views.logout, name="logout"),
     path("test/", views.test, name="test"),
     path("chat/", views.chat, name="chat"),
+    path("editor/", views.editor, name="editor"),
+    path("editor/<int:file>/", views.editor_file, name="editor_file"),
 ]

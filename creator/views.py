@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from .models import UserFile
 import json
 
 
@@ -52,4 +53,25 @@ def test(request):
 @login_required
 def chat(request):
     return render(request, 'chat.html')
+
+@csrf_exempt
+@login_required
+def editor(request):
+    if request.method == "POST":
+        files = UserFile.objects.filter(user=request.user).values('id', 'folder', 'name', 'language', 'created_at', 'updated_at')
+        files_list = list(files)
+        return JsonResponse({'files': files_list}, status=200)
+    return render(request, 'editor.html')
+
+@csrf_exempt
+@login_required
+def editor_file(request, file):
+    if request.method == "POST":
+        if not UserFile.objects.filter(id=file).exists():
+            return JsonResponse({'message': 'File does not exist'}, status=404)
+        user_file = UserFile.objects.get(id=file)
+        if user_file.user != request.user:
+            return JsonResponse({'message': 'File does not belong to user'}, status=401)
+        return JsonResponse({"name": user_file.name, "content": user_file.content}, status=200)
+    return render(request, 'editor.html', {'file': file})
 
