@@ -75,3 +75,30 @@ def editor_file(request, file):
         return JsonResponse({"name": user_file.name, "content": user_file.content}, status=200)
     return render(request, 'editor.html', {'file': file})
 
+@csrf_exempt
+@login_required
+def save_file(request, file):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        if not UserFile.objects.filter(id=file).exists():
+            return JsonResponse({'message': 'File does not exist'}, status=404)
+        user_file = UserFile.objects.get(id=file)
+        if user_file.user != request.user:
+            return JsonResponse({'message': 'File does not belong to user'}, status=401)
+        user_file.content = data.get("content")
+        user_file.save()
+        return JsonResponse({'message': 'File saved'}, status=200)
+    return JsonResponse({'message': 'Wrong method'}, status=401)
+
+@csrf_exempt
+@login_required
+def new_file(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        if data.get("name") == "" or data.get("language") == "":
+            return JsonResponse({'message': 'Provide file name and language'}, status=400)
+        user_file = UserFile(user=request.user, name=data.get("name"), language=data.get("language"))
+        user_file.save()
+        return JsonResponse({'message': 'File created'}, status=200)
+    return JsonResponse({'message': 'Wrong method'}, status=401)
+

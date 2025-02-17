@@ -1,48 +1,83 @@
-document.addEventListener('DOMContentLoaded', function() {
-  fetch('/editor/', {
-    method: 'POST',
+document.addEventListener("DOMContentLoaded", function () {
+  fetch("/editor/", {
+    method: "POST",
     headers: {
-        'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({})
-})
-  .then(response => response.json())
-  .then(data => {
-    const fileList = document.getElementById('file-list');
-    data.files.forEach(file => {
-      const li = document.createElement('li');
-      const a = document.createElement('a');
-      a.href = "/editor/" + file.id;
-      a.textContent = file.folder + file.name + "." + file.language;
-      li.appendChild(a);
-      fileList.appendChild(li);
-      });
+    body: JSON.stringify({}),
   })
-  .catch(error => console.error('Error fetching files:', error));
+    .then((response) => response.json())
+    .then((data) => {
+      const fileList = document.getElementById("file-list");
+      data.files.forEach((file) => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = "/editor/" + file.id;
+        a.textContent = file.folder + file.name + "." + file.language;
+        li.appendChild(a);
+        fileList.appendChild(li);
+      });
+    })
+    .catch((error) => console.error("Error fetching files:", error));
 
   const path = window.location.pathname;
-  const pathParts = path.split('/');
+  const pathParts = path.split("/");
   const fileId = pathParts.length > 2 ? pathParts[2] : null;
 
   if (fileId) {
-    fetch('/editor/' + fileId + "/", {
-      method: 'POST',
+    fetch("/editor/" + fileId + "/", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
-    .then(response => {
-      if (response.status === 401) {
-        return {content: "You are not authorized to view this file."};
-      }
-      if (response.status === 404) {
-        return {content: "File does not exist."};
-      }
-      return response.json() 
-    })
-    .then(data => {
-      document.getElementById('editor-textarea').textContent = data.content;
-    })
-    .catch(error => console.error('Error fetching file:', error));
+      .then((response) => {
+        if (response.status === 401) {
+          return { content: "You are not authorized to view this file." };
+        }
+        if (response.status === 404) {
+          return { content: "File does not exist." };
+        }
+        return response.json();
+      })
+      .then((data) => {
+        document.getElementById("editor-textarea").textContent = data.content;
+      })
+      .catch((error) => console.error("Error fetching file:", error));
   }
+
+  document.getElementById("save-button").addEventListener("click", function () {
+    const path = window.location.pathname;
+    const pathParts = path.split("/");
+    const fileId = pathParts.length > 2 ? pathParts[2] : null;
+    const content = document.getElementById("editor-textarea").value;
+    fetch("/save/" + fileId + "/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ content: content }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("File saved");
+      })
+      .catch((error) => console.error("Error saving file:", error));
+  });
+
+  document.getElementById("new-file").addEventListener("click", function () {
+    fetch("/new_file/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({name: document.getElementById("file-name").value, language: document.getElementById("file-type").value}),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        window.location = "/editor/" + data.id;
+      })
+      .catch((error) => console.error("Error creating new file:", error));
+  });
 });
+

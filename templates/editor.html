@@ -12,7 +12,14 @@
 </head>
 <body>
     <div class="sidebar">
-        <a href="#" class="new-file">+ New File</a>
+        <button id="new-file" class="new-file">+ New File</button>
+        <input type="text" id="file-name" placeholder="File name">
+        <select name="file-type" id="file-type">
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="js">JavaScript</option>
+            <option value="py">Python</option>
+        </select>
         <h2>Files</h2>
         <ul id="file-list">
             <!-- Files will be dynamically added here -->
@@ -20,6 +27,7 @@
     </div>
     <div class="editor">
         <h1>Editor</h1>
+        <button id="save-button">Save</button>
         <textarea id="editor-textarea" style="width: 100%; height: 80vh;"></textarea>
     </div>
 </body>

@@ -11,4 +11,6 @@ urlpatterns = [
     path("chat/", views.chat, name="chat"),
     path("editor/", views.editor, name="editor"),
     path("editor/<int:file>/", views.editor_file, name="editor_file"),
+    path("save/<int:file>/", views.save_file, name="save_file"),
+    path("new_file/", views.new_file, name="new_file"),
 ]
