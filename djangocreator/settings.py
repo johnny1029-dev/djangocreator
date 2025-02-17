@@ -30,6 +30,11 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
 ]
+CSRF_TRUSTED_ORIGINS = [
+    'johnny1029.pl',
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
