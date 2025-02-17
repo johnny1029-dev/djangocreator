@@ -31,9 +31,9 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
 ]
 CSRF_TRUSTED_ORIGINS = [
-    'johnny1029.pl',
-    'localhost',
-    '127.0.0.1',
+    'https://johnny1029.pl',
+    'http://localhost',
+    'http://127.0.0.1',
 ]
 
 
