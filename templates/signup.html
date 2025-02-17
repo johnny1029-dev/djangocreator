@@ -8,6 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Signup</title>
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    {% csrf_token %}
+    <script>
+      const csrftoken = document.querySelector(
+        "[name=csrfmiddlewaretoken]"
+      ).value;
+    </script>
     <script src="{% static 'js/signup.js' %}"></script>
   </head>
   <body>

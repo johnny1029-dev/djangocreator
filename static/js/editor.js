@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRFToken": csrftoken,
+      "mode": "same-origin",
     },
     body: JSON.stringify({}),
   })
@@ -29,19 +31,28 @@ document.addEventListener("DOMContentLoaded", function () {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken,
+        "mode": "same-origin",
       },
     })
       .then((response) => {
+        document.getElementById("editor-textarea").removeAttribute("readonly");
+        document.getElementById("save-button").removeAttribute("disabled");
         if (response.status === 401) {
-          return { content: "You are not authorized to view this file." };
+          document.getElementById("editor-textarea").setAttribute("readonly", "true");
+          document.getElementById("save-button").setAttribute("disabled", "true");
+          return { content: "You are not authorized to view this file.", name: "Unauthorized", language: ""};
         }
         if (response.status === 404) {
-          return { content: "File does not exist." };
+          document.getElementById("editor-textarea").setAttribute("readonly", "true");
+          document.getElementById("save-button").setAttribute("disabled", "true");
+          return { content: "File does not exist.", name: "Not Found", language: "" };
         }
         return response.json();
       })
       .then((data) => {
         document.getElementById("editor-textarea").textContent = data.content;
+        document.getElementById("filename").textContent = data.name + "." + data.language;
       })
       .catch((error) => console.error("Error fetching file:", error));
   }
@@ -55,6 +66,8 @@ document.addEventListener("DOMContentLoaded", function () {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken,
+        "mode": "same-origin",
       },
       body: JSON.stringify({ content: content }),
     })
@@ -65,16 +78,33 @@ document.addEventListener("DOMContentLoaded", function () {
       .catch((error) => console.error("Error saving file:", error));
   });
 
+  let error = false
   document.getElementById("new-file").addEventListener("click", function () {
     fetch("/new_file/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken,
+        "mode": "same-origin",
       },
       body: JSON.stringify({name: document.getElementById("file-name").value, language: document.getElementById("file-type").value}),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status === 400) {
+          error = true;
+          return response.json();
+        } 
+        return response.json() 
+      })
       .then((data) => {
+        if (error) {
+          console.error("Error creating new file", data);
+          document.getElementById("editor-textarea").setAttribute("readonly", "true");
+          document.getElementById("save-button").setAttribute("disabled", "true");
+          document.getElementById("editor-textarea").textContent = "Error creating file: " + data.message;
+          document.getElementById("filename").textContent = "Error";
+          return;
+        };
         window.location = "/editor/" + data.id;
       })
       .catch((error) => console.error("Error creating new file:", error));

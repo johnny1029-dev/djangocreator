@@ -8,6 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editor</title>
     <link rel="stylesheet" href="{% static 'css/editor.css' %}">
+    {% csrf_token %}
+    <script>
+    const csrftoken = document.querySelector(
+        "[name=csrfmiddlewaretoken]"
+    ).value;
+    </script>
     <script src="{% static 'js/editor.js' %}"></script>
 </head>
 <body>
@@ -26,9 +32,9 @@
         </ul>
     </div>
     <div class="editor">
-        <h1>Editor</h1>
+        <h1 id="filename">Open a file</h1>
         <button id="save-button">Save</button>
-        <textarea id="editor-textarea" style="width: 100%; height: 80vh;"></textarea>
+        <textarea id="editor-textarea" readonly></textarea>
     </div>
 </body>
 </html>
