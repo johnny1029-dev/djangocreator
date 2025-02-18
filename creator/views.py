@@ -86,6 +86,18 @@ def save_file(request, file):
     return JsonResponse({'message': 'Wrong method'}, status=401)
 
 @login_required
+def delete_file(request, file):
+    if request.method == "POST":
+        if not UserFile.objects.filter(id=file).exists():
+            return JsonResponse({'message': 'File does not exist'}, status=404)
+        user_file = UserFile.objects.get(id=file)
+        if user_file.user != request.user:
+            return JsonResponse({'message': 'File does not belong to user'}, status=401)
+        user_file.delete()
+        return JsonResponse({'message': 'File deleted'}, status=200)
+    return JsonResponse({'message': 'Wrong method'}, status=401)
+
+@login_required
 def new_file(request):
     if request.method == "POST":
         data = json.loads(request.body)

@@ -19,12 +19,9 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   function sendMessage() {
+    if (chatInput.value === "" || chatInput.value === "\n") return;
     const message = chatInput.value;
     chatInput.value = "";
-
-    if (message === "") {
-      return;
-    }
 
     const messageElement = document.createElement("div");
     messageElement.innerHTML = DOMPurify.sanitize(marked.parse(message));
@@ -38,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
     thinkingMessageElement.innerText = "thinking...";
     thinkingMessageElement.classList.add("message");
     chatMessages.appendChild(thinkingMessageElement);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 
     fetch("https://johnny1029.pl/v1/chat/completions", {
       method: "POST",
@@ -69,6 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
         thinkingMessageElement.innerHTML = DOMPurify.sanitize(
           marked.parse(data.choices[0].message.content)
         );
+        chatMessages.scrollTop = chatMessages.scrollHeight;
       })
       .catch((error) => {
         thinkingMessageElement.innerText =
