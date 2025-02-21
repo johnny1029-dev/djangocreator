@@ -16,11 +16,15 @@ def login(request):
         data = json.loads(request.body)
         if data.get("username") == "" or data.get("password") == "":
             return JsonResponse({'message': "Provide credentials"}, status=401)
+        try:
+            user = User.objects.get(username=data.get("username"))
+        except User.DoesNotExist:
+            return JsonResponse({'message': 'User does not exist'}, status=404)
         user = authenticate(request, username=data.get("username"), password=data.get("password"))
         if user is not None:
             auth_login(request, user)
             return JsonResponse({'message': 'User authenticated'}, status=200)
-        return JsonResponse({'message': 'User does not exist'}, status=404)
+        return JsonResponse({'message': 'Wrong password'}, status=404)
     return render(request, 'login.html')
 
 def signup(request):
