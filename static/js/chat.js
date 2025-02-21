@@ -3,7 +3,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const chatInput = document.getElementById("userInput");
   const chatMessages = document.getElementById("chat");
 
-  let pastMessages = [{role: "system", content: "Your name is ChatDziPiTi, you are a django assistant",}];
+  let pastMessages = [
+    {
+      role: "system",
+      content: "Your name is ChatDziPiTi, you are a django assistant",
+    },
+  ];
 
   chatInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
@@ -29,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
     chatMessages.appendChild(messageElement);
     delete messageElement;
 
-    pastMessages.push({role: "user", content: message});
+    pastMessages.push({ role: "user", content: message });
 
     const thinkingMessageElement = document.createElement("div");
     thinkingMessageElement.innerText = "thinking...";
@@ -52,8 +57,16 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then((response) => {
         if (response.ok) {
-          if(response.status === 204) {
-            return{choices: [{message: {content: "The server is offline. Please try again later."}}]};
+          if (response.status === 204) {
+            return {
+              choices: [
+                {
+                  message: {
+                    content: "The server is offline. Please try again later.",
+                  },
+                },
+              ],
+            };
           }
           return response.json();
         } else {

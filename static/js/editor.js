@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
       headers: {
         "Content-Type": "application/json",
         "X-CSRFToken": csrftoken,
-        mode: "same-origin",
+        "mode": "same-origin",
       },
       body: JSON.stringify({}),
     })
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const pathParts = path.split("/");
     return pathParts.length > 2 ? pathParts[2] : null;
   }
-  
+
   const fileId = getFileId();
   if (fileId) {
     fetch("/editor/" + fileId + "/", {
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
       headers: {
         "Content-Type": "application/json",
         "X-CSRFToken": csrftoken,
-        mode: "same-origin",
+        "mode": "same-origin",
       },
     })
       .then((response) => {
@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
       headers: {
         "Content-Type": "application/json",
         "X-CSRFToken": csrftoken,
-        mode: "same-origin",
+        "mode": "same-origin",
       },
       body: JSON.stringify({ content: content }),
     })
@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
       headers: {
         "Content-Type": "application/json",
         "X-CSRFToken": csrftoken,
-        mode: "same-origin",
+        "mode": "same-origin",
       },
     })
       .then((response) => response.json())
@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
       headers: {
         "Content-Type": "application/json",
         "X-CSRFToken": csrftoken,
-        mode: "same-origin",
+        "mode": "same-origin",
       },
       body: JSON.stringify({
         name: document.getElementById("file-name").value,
@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .catch((error) => console.error("Error creating new file:", error));
   }
-  
+
   document.getElementById("new-file").addEventListener("click", function () {
     document.getElementById("context-menu-file").style.display = "flex";
   });
