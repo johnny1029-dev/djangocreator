@@ -20,7 +20,7 @@ def login(request):
         if user is not None:
             auth_login(request, user)
             return JsonResponse({'message': 'User authenticated'}, status=200)
-        return JsonResponse({'message': 'User is not :('}, status=401)
+        return JsonResponse({'message': 'User does not exist'}, status=404)
     return render(request, 'login.html')
 
 def signup(request):

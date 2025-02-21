@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Signup</title>
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/toastr.min.css' %}">
     {% csrf_token %}
     <script>
       const csrftoken = document.querySelector(
@@ -15,6 +16,8 @@
       ).value;
     </script>
     <script src="{% static 'js/signup.js' %}"></script>
+    <script src="{% static 'js/jguwno.js' %}"></script>
+    <script src="{% static 'js/toastr.min.js' %}"></script>
   </head>
   <body>
     <form id="signupForm">
