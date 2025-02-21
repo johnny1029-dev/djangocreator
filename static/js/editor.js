@@ -159,8 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function deleteFile(target) {
-    const targetPath = target.lastChild.href;
-    const fileId = targetPath.split("/")[4];
+    const fileId = target.href.split("/")[4];
     const path = window.location.pathname;
     const pathParts = path.split("/");
     const currentId = pathParts.length > 2 ? pathParts[2] : null;
