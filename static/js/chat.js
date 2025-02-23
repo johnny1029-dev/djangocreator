@@ -62,6 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
               choices: [
                 {
                   message: {
+                    role: "system",
                     content: "The server is offline. Please try again later.",
                   },
                 },
