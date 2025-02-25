@@ -185,7 +185,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return response.json();
       })
       .then((data) => {
-        textarea.textContent = data.content;
+        textarea.value = data.content;
         document.getElementById("filename").textContent =
           data.name + "." + data.language;
       })
@@ -233,7 +233,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("File deleted");
         updateFileList();
         if (currentId === fileId) {
-          textarea.textContent = "";
+          textarea.value = "";
           textarea.setAttribute("readonly", "true");
           document
             .getElementById("save-button")
