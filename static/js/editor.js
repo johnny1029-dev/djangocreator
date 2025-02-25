@@ -19,44 +19,54 @@ document.addEventListener("DOMContentLoaded", function () {
     hideMethod: "fadeOut",
   };
 
-  function sweetAlert(){
-    (async () => {
-  
-    const { value: formValues } = await Swal.fire({
-      title: 'Multiple inputs',
+  function showFileCreationDialog(){
+    Swal.fire({
+      title: 'New file',
       html:
-        '<input id="swal-input1" class="swal2-input">' +
-        '<input id="swal-input2" class="swal2-input">',
+        `<input id="file-name" class="swal2-input" placeholder="filename">
+        <select name="file-type" id="file-type">
+        <option value="html">HTML</option>
+        <option value="css">CSS</option>
+        <option value="js">JavaScript</option>
+        <option value="py">Python</option>
+        </select>`,
       focusConfirm: false,
-      preConfirm: () => {
-        return [
-          document.getElementById('swal-input1').value,
-          document.getElementById('swal-input2').value
-        ]
-      }
-    })
-  
-    if (formValues) {
-      Swal.fire(JSON.stringify(formValues))
-    }
-  
-    })()
+      preConfirm: createFile
+    });
   }
 
-  sweetAlert();
+  async function deleteConfirm(){
+    del = false;
+    await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.value) {
+        del = true;
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success"
+        });
+      }
+    });
+    return del;
+  }
 
   textarea.addEventListener("keydown", function (e) {
     if (e.key === "Tab") {
       e.preventDefault();
       const start = this.selectionStart;
       const end = this.selectionEnd;
-
       // Set textarea value to: text before caret + tab + text after caret
       this.value =
         this.value.substring(0, start) + "\t" + this.value.substring(end);
-
-      // Put caret at right position again
-      this.selectionStart = this.selectionEnd = start + 1;
+      this.selectionStart = this.selectionEnd = start + 1; // Put caret at right position again
     }
 
     if (e.ctrlKey && e.key === "s") {
@@ -66,7 +76,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   const contextMenu = document.getElementById("context-menu");
-
   const menus = {
     menu1: [{ label: "Delete", action: deleteFile }],
   };
@@ -196,13 +205,15 @@ document.addEventListener("DOMContentLoaded", function () {
       body: JSON.stringify({ content: content }),
     })
       .then((response) => response.json())
-      .then((data) => {
+      .then(() => {
         toastr["success"]("File saved");
       })
       .catch((error) => toastr["error"](error, "Error saving file"));
   }
 
-  function deleteFile(target) {
+  async function deleteFile(target) {
+    const del = await deleteConfirm();
+    if (!del) return;
     const fileId = target.href.split("/")[4];
     const path = window.location.pathname;
     const pathParts = path.split("/");
@@ -216,18 +227,26 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     })
       .then((response) => response.json())
-      .then((data) => {
+      .then(() => {
         console.log("File deleted");
-        if (currentId === fileId) window.location = "/editor/";
-        else updateFileList();
+        updateFileList();
+        if (currentId === fileId) {
+          textarea.textContent = "";
+          textarea.setAttribute("readonly", "true");
+          document
+            .getElementById("save-button")
+            .setAttribute("disabled", "true");
+          history.pushState(null, "", "/editor/");
+          document.getElementById("filename").textContent = "Open a file";
+        }
       })
       .catch((error) => toastr["error"](error, "Error deleting file"));
   }
 
   document.getElementById("save-button").addEventListener("click", saveFile);
 
-  let error = false;
   function createFile() {
+    let error = false;
     fetch("/new_file/", {
       method: "POST",
       headers: {
@@ -249,26 +268,14 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .then((data) => {
         if (error) {
-          toastr["error"](error, "Error creating file");
-          textarea.setAttribute("readonly", "true");
-          document
-            .getElementById("save-button")
-            .setAttribute("disabled", "true");
-          textarea.textContent = "Error creating file: " + data.message;
-          document.getElementById("filename").textContent = "Error";
+          toastr["error"](data.message, "Error creating file");
           return;
         }
-        window.location = "/editor/" + data.id;
+        updateFileList();
+        toastr["success"]("File created");
       })
-      .catch((error) => console.error("Error creating new file:", error));
+      .catch((error) => toastr["error"](error, "Error creating file"));
   }
 
-  document.getElementById("new-file").addEventListener("click", function () {
-    document.getElementById("context-menu-file").style.display = "flex";
-  });
-
-  document.getElementById("create").addEventListener("click", createFile);
-  document.getElementById("close").addEventListener("click", function () {
-    document.getElementById("context-menu-file").style.display = "none";
-  });
+  document.getElementById("new-file").addEventListener("click", showFileCreationDialog);
 });
