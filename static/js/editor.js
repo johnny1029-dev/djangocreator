@@ -1,6 +1,24 @@
 document.addEventListener("DOMContentLoaded", function () {
   const textarea = document.getElementById("editor-textarea");
 
+  toastr.options = {
+    closeButton: true,
+    debug: false,
+    newestOnTop: false,
+    progressBar: true,
+    positionClass: "toast-top-right",
+    preventDuplicates: true,
+    onclick: null,
+    showDuration: "300",
+    hideDuration: "1000",
+    timeOut: "5000",
+    extendedTimeOut: "1000",
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",
+    hideMethod: "fadeOut",
+  };
+
   function sweetAlert(){
     (async () => {
   
@@ -107,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         });
       })
-      .catch((error) => console.error("Error fetching files:", error));
+      .catch((error) => toastr["error"](error, "Error fetching files"));
   }
 
   updateFileList();
@@ -160,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("filename").textContent =
           data.name + "." + data.language;
       })
-      .catch((error) => console.error("Error fetching file:", error));
+      .catch((error) => toastr["error"](error, "Error fetching file"));
   }
 
   function saveFile() {
@@ -179,9 +197,9 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("File saved");
+        toastr["success"]("File saved");
       })
-      .catch((error) => console.error("Error saving file:", error));
+      .catch((error) => toastr["error"](error, "Error saving file"));
   }
 
   function deleteFile(target) {
@@ -203,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (currentId === fileId) window.location = "/editor/";
         else updateFileList();
       })
-      .catch((error) => console.error("Error deleting file:"));
+      .catch((error) => toastr["error"](error, "Error deleting file"));
   }
 
   document.getElementById("save-button").addEventListener("click", saveFile);
@@ -231,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .then((data) => {
         if (error) {
-          console.error("Error creating new file", data);
+          toastr["error"](error, "Error creating file");
           textarea.setAttribute("readonly", "true");
           document
             .getElementById("save-button")

@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Editor</title>
     <link rel="stylesheet" href="{% static 'css/editor.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/toastr.min.css' %}">
     {% csrf_token %}
     <script>
       const csrftoken = document.querySelector(
@@ -20,6 +21,8 @@
     </script>
     <script src="{% static 'js/editor.js' %}"></script>
     <script src="{% static 'js/sweetalert2.all.min.js' %}"></script>
+    <script src="{% static 'js/jguwno.js' %}"></script>
+    <script src="{% static 'js/toastr.min.js' %}"></script>
   </head>
   <body>
     <div class="sidebar">
