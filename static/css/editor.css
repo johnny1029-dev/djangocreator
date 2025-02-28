@@ -1,7 +1,11 @@
 body {
-  display: flex;
   margin: 0;
   font-family: Arial, sans-serif;
+}
+
+.editorContainer {
+  display: flex;
+
 }
 
 .sidebar {
@@ -72,14 +76,14 @@ body {
 textarea {
   width: 100%;
   height: calc(
-    100vh - 115px
-  ); /* Adjust the 40px based on the padding/margin of parent elements */
+    100vh - 140px
+  ); /* Adjust the -px based on the padding/margin of parent elements */
   resize: none;
 }
 
 #save-button {
   position: fixed;
-  top: 15px;
+  top: 55px;
   right: 15px;
   width: 60px;
   padding: 10px;

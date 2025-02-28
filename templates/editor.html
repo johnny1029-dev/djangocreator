@@ -13,6 +13,8 @@
     <title>Editor</title>
     <link rel="stylesheet" href="{% static 'css/editor.css' %}" />
     <link rel="stylesheet" href="{% static 'css/toastr.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
+    <script src="{% static 'js/logoutTest.js' %}"></script>
     {% csrf_token %}
     <script>
       const csrftoken = document.querySelector(
@@ -25,17 +27,20 @@
     <script src="{% static 'js/toastr.min.js' %}"></script>
   </head>
   <body>
-    <div class="sidebar">
-      <button id="new-file" class="new-file">+ New File</button>
-      <h2>Files</h2>
-      <ul id="file-list">
-        <!-- Files will be dynamically added here -->
-      </ul>
-    </div>
-    <div class="editor">
-      <h1 id="filename">Open a file</h1>
-      <button id="save-button" disabled>Save</button>
-      <textarea id="editor-textarea" readonly></textarea>
+    {% include "navbar.html" %}
+    <div class="editorContainer">
+      <div class="sidebar">
+        <button id="new-file" class="new-file">+ New File</button>
+        <h2>Files</h2>
+        <ul id="file-list">
+          <!-- Files will be dynamically added here -->
+        </ul>
+      </div>
+      <div class="editor">
+        <h1 id="filename">Open a file</h1>
+        <button id="save-button" disabled>Save</button>
+        <textarea id="editor-textarea" readonly></textarea>
+      </div>
     </div>
     <div id="context-menu" class="context-menu"></div>
   </body>

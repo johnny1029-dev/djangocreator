@@ -9,16 +9,17 @@
   <title>AI django assistant</title>
   <link rel="stylesheet" href="{% static 'css/chat.css' %}">
   <script src="{% static 'js/chat.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
+  <script src="{% static 'js/logoutTest.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/purify.min.js' %}"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-  </select>
+  {% include "navbar.html" %}
   <div id="chat_container">
     <div id="chat"></div>
     <input type="text" id="userInput" />
     <button id="send">Send</button>
   </div>
-
 </body>
 </html>
